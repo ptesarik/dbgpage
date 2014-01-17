@@ -15,8 +15,17 @@ static struct inode_operations dbg_inode_ops;
 
 static int dbg_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
 {
-	struct inode *inode = new_inode(dir->i_sb);
+	struct inode *inode;
+	unsigned long pfn;
+	char *end;
 
+	pfn = simple_strtoul(dentry->d_name.name, &end, 10);
+	if (*end != 0)
+		return -EINVAL;
+	if (!pfn_valid(pfn))
+		return -EINVAL;
+
+	inode = new_inode(dir->i_sb);
 	if (!inode)
 		return -ENOMEM;
 
