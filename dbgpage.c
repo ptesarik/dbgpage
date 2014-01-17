@@ -54,6 +54,7 @@ static int __init dbgpage_init(void)
 	dbgino = dbgdir->d_inode;
 	memcpy(&dbg_inode_ops, dbgino->i_op, sizeof(dbg_inode_ops));
 	dbg_inode_ops.mkdir = dbg_mkdir;
+	dbg_inode_ops.rmdir = simple_rmdir;
 	dbgino->i_op = &dbg_inode_ops;
 
 	printk(KERN_INFO "dbgpage: Module loaded\n");
